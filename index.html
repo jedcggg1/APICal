@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div class="space-calc-card">
+        <h2>Calculator</h2>
+        <div class="input-group">
+            <label for="NBX">Enter Number X</label>
+            <input type="number" id="NBX">
+        </div>
+        <div class="input-group">
+            <label for="operator">Select operator</label>
+            <select id="operator">
+                <option value="+">+</option>
+                <option value="-">-</option>
+                <option value="*">*</option>
+                <option value="/">/</option>
+                <option value="%">%</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="NBY">Enter Number Y</label>
+            <input type="number" id="NBY">
+        </div>
+        <button id="calculateBTN">Calculate</button>
+        <div class="result-container">
+            <p>Result: <span id="result">--</span></p>
+        </div>
+    </div>
+</body>
+</html>
