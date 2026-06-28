@@ -5,17 +5,17 @@ const app = express();
 app.use(cors());
 
 const validateInputs = (num1, num2, res) => {
+    if (isNaN(n1) || isNaN(n2)) {
+        res.status(400).json({ error: "Invalid numbers provided." });
+        return false;
+    }
+    return { n1, n2 };
     if (num1 === undefined || num2 === undefined || num1 === '' || num2 === '') {
         res.status(400).json({ error: "Enter all information." });
         return false;
     }
     const n1 = parseFloat(num1);
     const n2 = parseFloat(num2);
-    if (isNaN(n1) || isNaN(n2)) {
-        res.status(400).json({ error: "Invalid numbers provided." });
-        return false;
-    }
-    return { n1, n2 };
 };
 
 app.get("/add", (req, res) => {
