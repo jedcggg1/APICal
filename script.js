@@ -4,13 +4,20 @@ document.getElementById('calculateBTN').addEventListener('click', async () => {
     const operator = document.getElementById('operator').value;
     const resultSpan = document.getElementById('result');
 
-    resultSpan.innerText = "กำลังคำนวณ...";
+    resultSpan.innerText = "Calculating...";
     resultSpan.style.color = "inherit";
 
+    let endpoint = "";
+    switch (operator) {
+        case "+": endpoint = "add"; break;
+        case "-": endpoint = "subtract"; break;
+        case "*": endpoint = "multiply"; break;
+        case "/": endpoint = "divide"; break;
+        case "%": endpoint = "modulo"; break;
+    }
+
     try {
-        const encodedOperator = encodeURIComponent(operator);
-        
-        const response = await fetch(`http://localhost:3000/calculate?num1=${num1}&num2=${num2}&operator=${encodedOperator}`);
+        const response = await fetch(`http://localhost:3000/${endpoint}?num1=${num1}&num2=${num2}`);
         const data = await response.json();
 
         if (response.ok) {
@@ -21,7 +28,7 @@ document.getElementById('calculateBTN').addEventListener('click', async () => {
             resultSpan.style.color = "#F44336";
         }
     } catch (error) {
-        resultSpan.innerText = "ไม่สามารถเชื่อมต่อ Server ได้";
+        resultSpan.innerText = "Cannot connect to the server.";
         resultSpan.style.color = "#F44336";
     }
 });

@@ -4,37 +4,54 @@ const cors = require("cors");
 const app = express();
 app.use(cors());
 
-app.get("/calculate", (req, res) => {
-    const { num1, num2, operator } = req.query;
-
+const validateInputs = (num1, num2, res) => {
+    if (num1 === undefined || num2 === undefined || num1 === '' || num2 === '') {
+        res.status(400).json({ error: "Enter all information." });
+        return false;
+    }
     const n1 = parseFloat(num1);
     const n2 = parseFloat(num2);
-
     if (isNaN(n1) || isNaN(n2)) {
-        return res.status(400).json({ error: "Invalid numbers provided." });
+        res.status(400).json({ error: "Invalid numbers provided." });
+        return false;
     }
+    return { n1, n2 };
+};
 
-    if (num1 === undefined || num2 === undefined || operator === undefined || num1 === '' || num2 === '') {
-        return res.status(400).json({ error: "Enter all information." });
+app.get("/add", (req, res) => {
+    const valid = validateInputs(req.query.num1, req.query.num2, res);
+    if (!valid) return;
+    res.json({ operation: "+", result: valid.n1 + valid.n2 });
+});
+
+app.get("/subtract", (req, res) => {
+    const valid = validateInputs(req.query.num1, req.query.num2, res);
+    if (!valid) return;
+    res.json({ operation: "-", result: valid.n1 - valid.n2 });
+});
+
+app.get("/multiply", (req, res) => {
+    const valid = validateInputs(req.query.num1, req.query.num2, res);
+    if (!valid) return;
+    res.json({ operation: "*", result: valid.n1 * valid.n2 });
+});
+
+app.get("/divide", (req, res) => {
+    const valid = validateInputs(req.query.num1, req.query.num2, res);
+    if (!valid) return;
+    if (valid.n2 === 0) {
+        return res.status(400).json({ error: "Cannot divide by 0." });
     }
+    res.json({ operation: "/", result: valid.n1 / valid.n2 });
+});
 
-    let result;
-
-    switch (operator) {
-        case "+": result = n1 + n2; break;
-        case "-": result = n1 - n2; break;
-        case "*": result = n1 * n2; break;
-        case "/":
-            if (n2 === 0) return res.status(400).json({ error: "Cannot divide by 0." });
-            result = n1 / n2;
-            break;
-        case "%":
-            if (n2 === 0) return res.status(400).json({ error: "Cannot modulo by 0." });
-            result = n1 % n2; break;
-        default: return res.status(400).json({ error: "Error" });
+app.get("/modulo", (req, res) => {
+    const valid = validateInputs(req.query.num1, req.query.num2, res);
+    if (!valid) return;
+    if (valid.n2 === 0) {
+        return res.status(400).json({ error: "Cannot modulo by 0." });
     }
-
-    res.json({ operation: operator, result: result });
+    res.json({ operation: "%", result: valid.n1 % valid.n2 });
 });
 
 app.listen(3000, () => {
